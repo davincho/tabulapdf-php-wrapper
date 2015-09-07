@@ -1,0 +1,12 @@
+{
+    "name": "davincho/tabulapdf-php-wrapper",
+    "require": {
+        "symfony/process": "^2.7"
+    },
+    "authors": [
+        {
+            "name": "David Madner",
+            "email": "david.madner@gmx.net"
+        }
+    ]
+}
