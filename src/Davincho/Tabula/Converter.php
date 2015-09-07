@@ -52,14 +52,17 @@ class Converter
         $this->file = $file;
     }
 
-    public function parse($file = null) {
+    public function parse($file = null, $parameters = []) {
         $inputFile = $file ? $file : $this->file;
+        $parameters = is_array($parameters) ? $parameters : [$parameters];
 
         if($inputFile === null || !file_exists($inputFile) || !is_readable($inputFile)) {
             throw new FileIsNullOrNotExistentException('File is null, not existent or not readable');
         }
 
-        $process = new Process('java -jar ' . $this->library . ' ' . $file);
+        $arguments = ['java -jar', $this->library, implode(' ', $parameters), $file];
+
+        $process = new Process(implode(' ', $arguments));
         $process->run();
 
         return $process->getOutput();

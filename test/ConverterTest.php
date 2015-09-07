@@ -33,8 +33,28 @@ class ConverterTest extends PHPUnit_Framework_TestCase
         $this->converter->parse();
     }
 
-//    public function shouldParsePdfFile() {
-//        $this->converter->parse()
-//    }
+    /** @test */
+    public function shouldParsePdfFile() {
+        $file = __DIR__ . '/test_1.pdf';
 
+        $result = $this->converter->parse($file);
+        $lines = explode(PHP_EOL, $result);
+
+        $this->assertEquals('1,2', $lines[0]);
+        $this->assertEquals('9,10', $lines[4]);
+    }
+
+    /** @test */
+    function shouldUseParametersAccordingly() {
+        $file = __DIR__ . '/test_1.pdf';
+        $output = sys_get_temp_dir() . '/tmp.txt';
+
+        $result = $this->converter->parse($file, [
+            '-o ' . $output
+        ]);
+
+        unlink($output);
+
+        $this->assertNull($result);
+    }
 }
