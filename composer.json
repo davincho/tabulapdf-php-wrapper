@@ -2,6 +2,7 @@
   "name": "davincho/tabulapdf-php-wrapper",
   "descritpion": "An OO PHP Wrapper for tabula-java",
   "require": {
+    "php": ">=5.4.0",
     "symfony/process": "^2.7"
   },
   "require-dev": {
