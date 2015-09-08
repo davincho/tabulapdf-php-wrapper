@@ -27,7 +27,7 @@ class ConverterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException \Davincho\Tabula\FileIsNullOrNotExistentException
+     * @expectedException \Symfony\Component\Process\Exception\InvalidArgumentException
      */
     public function shouldThrowExpcetionWhenNoFileSpecified() {
         $this->converter->parse();
@@ -47,14 +47,40 @@ class ConverterTest extends PHPUnit_Framework_TestCase
     /** @test */
     function shouldUseParametersAccordingly() {
         $file = __DIR__ . '/test_1.pdf';
-        $output = sys_get_temp_dir() . '/tmp.txt';
+        $output = tempnam(sys_get_temp_dir(), 'converter_test_');
 
         $result = $this->converter->parse($file, [
-            '-o ' . $output
+            '-o', $output
         ]);
 
-        unlink($output);
+        $fileContents = file($output);
 
+        $this->assertEquals('1,2', trim($fileContents[0]));
+        $this->assertEquals('9,10', trim($fileContents[4]));
         $this->assertNull($result);
+
+        unlink($output);
+    }
+
+    /** @test */
+    function shouldWorkWithSpacesInFilename() {
+        // Copy to file with blank in file name
+        $tempFile = tempnam(sys_get_temp_dir(), 'converter') . ' 1';
+        copy(__DIR__ . '/test_1.pdf', $tempFile);
+
+        $result = $this->converter->parse($tempFile);
+        $lines = explode(PHP_EOL, $result);
+
+        $this->assertEquals('1,2', $lines[0]);
+        $this->assertEquals('9,10', $lines[4]);
+    }
+
+    /**
+     * @test
+     * @expectedException \Symfony\Component\Process\Exception\RuntimeException
+     */
+    function shouldThrowExceptionWhenProcessFails() {
+        $file = __DIR__ . '/test_1.pdf';
+        $this->converter->parse($file, ['in', 'valid', 'arguments']);
     }
 }

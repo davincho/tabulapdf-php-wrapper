@@ -11,7 +11,9 @@
 
 namespace Davincho\Tabula;
 
-use Symfony\Component\Process\Process;
+use Symfony\Component\Process\Exception\InvalidArgumentException;
+use Symfony\Component\Process\Exception\RuntimeException;
+use Symfony\Component\Process\ProcessBuilder;
 
 class Converter
 {
@@ -57,13 +59,19 @@ class Converter
         $parameters = is_array($parameters) ? $parameters : [$parameters];
 
         if($inputFile === null || !file_exists($inputFile) || !is_readable($inputFile)) {
-            throw new FileIsNullOrNotExistentException('File is null, not existent or not readable');
+            throw new InvalidArgumentException('File is null, not existent or not readable');
         }
 
-        $arguments = ['java -jar', $this->library, implode(' ', $parameters), $file];
+        $processBuilder = new ProcessBuilder();
+        $processBuilder->setPrefix('java')
+            ->setArguments(array_merge(['-jar', $this->library, $file], $parameters));
 
-        $process = new Process(implode(' ', $arguments));
+        $process = $processBuilder->getProcess();
         $process->run();
+
+        if(!$process->isSuccessful()) {
+            throw new RuntimeException($process->getErrorOutput());
+        }
 
         return $process->getOutput();
     }
