@@ -21,7 +21,7 @@ class Converter
      * Default path to library
      * @var string
      */
-    private $library = __DIR__ . '/../../../tabula-extractor/bin/tabula';
+    private $library = __DIR__ . '/../../../vendor/tabulapdf/tabula-extractor/bin/tabula';
 
     /**
      * File to be converted (should be a PDF)
