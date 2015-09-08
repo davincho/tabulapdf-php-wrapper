@@ -81,6 +81,6 @@ class ConverterTest extends PHPUnit_Framework_TestCase
      */
     function shouldThrowExceptionWhenProcessFails() {
         $file = __DIR__ . '/test_1.pdf';
-        $this->converter->parse($file, ['in', 'valid', 'arguments']);
+        $this->converter->parse($file, ['--in', '--valid', '--arguments']);
     }
 }

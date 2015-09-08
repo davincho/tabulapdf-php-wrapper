@@ -21,7 +21,7 @@ class Converter
      * Default path to library
      * @var string
      */
-    private $library = __DIR__ . '/../../../lib/tabula-extractor-0.7.4-SNAPSHOT-jar-with-dependencies.jar';
+    private $library = __DIR__ . '/../../../tabula-extractor/bin/tabula';
 
     /**
      * File to be converted (should be a PDF)
@@ -63,8 +63,8 @@ class Converter
         }
 
         $processBuilder = new ProcessBuilder();
-        $processBuilder->setPrefix('java')
-            ->setArguments(array_merge(['-jar', $this->library, $file], $parameters));
+        $processBuilder->setPrefix('jruby')
+            ->setArguments(array_merge([$this->library, $file], $parameters));
 
         $process = $processBuilder->getProcess();
         $process->run();
