@@ -13,12 +13,13 @@ class ConverterTest extends PHPUnit_Framework_TestCase
 {
 
     /**
-     * @var \Davincho\Tabula\Converter
+     * @var \Davincho\Tabula\Tabula
      */
     private $converter;
 
     public function setUp() {
-        $this->converter = new \Davincho\Tabula\Converter();
+        $file = __DIR__ . '/test_1.pdf';
+        $this->converter = new \Davincho\Tabula\Tabula($file);
     }
 
     public function tearDown() {
@@ -30,14 +31,13 @@ class ConverterTest extends PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Process\Exception\InvalidArgumentException
      */
     public function shouldThrowExpcetionWhenNoFileSpecified() {
+        $this->converter->setFile(null);
         $this->converter->parse();
     }
 
     /** @test */
     public function shouldParsePdfFile() {
-        $file = __DIR__ . '/test_1.pdf';
-
-        $result = $this->converter->parse($file);
+        $result = $this->converter->parse();
         $lines = explode(PHP_EOL, $result);
 
         $this->assertEquals('1,2', $lines[0]);
@@ -46,10 +46,9 @@ class ConverterTest extends PHPUnit_Framework_TestCase
 
     /** @test */
     function shouldUseParametersAccordingly() {
-        $file = __DIR__ . '/test_1.pdf';
         $output = tempnam(sys_get_temp_dir(), 'converter_test_');
 
-        $result = $this->converter->parse($file, [
+        $result = $this->converter->parse([
             '-o', $output
         ]);
 
@@ -68,7 +67,7 @@ class ConverterTest extends PHPUnit_Framework_TestCase
         $tempFile = tempnam(sys_get_temp_dir(), 'converter') . ' 1';
         copy(__DIR__ . '/test_1.pdf', $tempFile);
 
-        $result = $this->converter->parse($tempFile);
+        $result = $this->converter->parse([], $tempFile);
         $lines = explode(PHP_EOL, $result);
 
         $this->assertEquals('1,2', $lines[0]);
@@ -80,7 +79,6 @@ class ConverterTest extends PHPUnit_Framework_TestCase
      * @expectedException \Symfony\Component\Process\Exception\RuntimeException
      */
     function shouldThrowExceptionWhenProcessFails() {
-        $file = __DIR__ . '/test_1.pdf';
-        $this->converter->parse($file, ['--in', '--valid', '--arguments']);
+        $this->converter->parse(['--in', '--valid', '--arguments']);
     }
 }

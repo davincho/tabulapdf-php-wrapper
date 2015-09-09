@@ -3,26 +3,11 @@
   "descritpion": "An OO PHP Wrapper for tabula-java",
   "require": {
     "php": ">=5.4.0",
-    "symfony/process": "^2.7",
-    "tabulapdf/tabula-extractor": "0.8.0"
+    "symfony/process": "^2.7"
   },
   "require-dev": {
     "phpunit/phpunit": "4.8.*"
   },
-  "repositories": [
-    {
-      "type": "package",
-      "package": {
-        "name": "tabulapdf/tabula-extractor",
-        "version": "0.8.0",
-        "source": {
-          "url": "https://github.com/tabulapdf/tabula-extractor",
-          "type": "git",
-          "reference": "origin/master"
-        }
-      }
-    }
-  ],
   "authors": [
     {
       "name": "David Madner",

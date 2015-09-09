@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "94b0e9229afd484c70e77a7c810be9d6",
+    "hash": "eb512d1e03d4a9350d863f05ea70e47f",
     "packages": [
         {
             "name": "symfony/process",
@@ -54,16 +54,6 @@
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
             "time": "2015-08-27 06:45:45"
-        },
-        {
-            "name": "tabulapdf/tabula-extractor",
-            "version": "0.8.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/tabulapdf/tabula-extractor",
-                "reference": "origin/master"
-            },
-            "type": "library"
         }
     ],
     "packages-dev": [

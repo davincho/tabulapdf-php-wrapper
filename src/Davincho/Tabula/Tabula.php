@@ -13,16 +13,11 @@ namespace Davincho\Tabula;
 
 use Symfony\Component\Process\Exception\InvalidArgumentException;
 use Symfony\Component\Process\Exception\RuntimeException;
+use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\ProcessBuilder;
 
-class Converter
+class Tabula
 {
-    /**
-     * Default path to library
-     * @var string
-     */
-    private $library = __DIR__ . '/../../../vendor/tabulapdf/tabula-extractor/bin/tabula';
-
     /**
      * File to be converted (should be a PDF)
      * @var
@@ -54,17 +49,24 @@ class Converter
         $this->file = $file;
     }
 
-    public function parse($file = null, $parameters = []) {
-        $inputFile = $file ? $file : $this->file;
+    public function parse($parameters = [], $file = null) {
+        $inputFile = $file !== null ? $file : $this->file;
         $parameters = is_array($parameters) ? $parameters : [$parameters];
 
         if($inputFile === null || !file_exists($inputFile) || !is_readable($inputFile)) {
             throw new InvalidArgumentException('File is null, not existent or not readable');
         }
 
+        $finder = new ExecutableFinder();
+        $binary = $finder->find('tabula');
+
+        if($binary === null) {
+            throw new RuntimeException('Could not find tabula on your system');
+        }
+
         $processBuilder = new ProcessBuilder();
-        $processBuilder->setPrefix('jruby')
-            ->setArguments(array_merge([$this->library, $file], $parameters));
+        $processBuilder->setPrefix($binary)
+            ->setArguments(array_merge([$inputFile], $parameters));
 
         $process = $processBuilder->getProcess();
         $process->run();
@@ -75,6 +77,4 @@ class Converter
 
         return $process->getOutput();
     }
-
-
 }
