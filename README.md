@@ -8,4 +8,4 @@ An OO PHP Wrapper for tabula-java - https://github.com/tabulapdf/tabula-extracto
 # Requirements
 
 1. PHP>=5.4.0
-2. jRuby (as tabula extractor is based on jRuby)
+2. jRuby + tabula extractor installed (``jruby -S gem install tabula-extractor``) and executable
