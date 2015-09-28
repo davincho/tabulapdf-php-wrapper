@@ -25,6 +25,11 @@ class Tabula
     private $file = null;
 
     /**
+     * Path to jar file
+     */
+    private $jarArchive = __DIR__ . './../../../lib/tabula-extractor-0.7.4-SNAPSHOT-jar-with-dependencies.jar';
+
+    /**
      * Converter constructor.
      * @param null $file
      */
@@ -58,15 +63,18 @@ class Tabula
         }
 
         $finder = new ExecutableFinder();
-        $binary = $finder->find('tabula');
+        $binary = $finder->find('java');
 
         if($binary === null) {
-            throw new RuntimeException('Could not find tabula on your system');
+            throw new RuntimeException('Could not find java on your system');
         }
+
+        // Jar binary, with additional java option (see https://github.com/tabulapdf/tabula-java/issues/26)
+        $arguments = ['-Xss2m', '-jar', $this->jarArchive, $inputFile];
 
         $processBuilder = new ProcessBuilder();
         $processBuilder->setPrefix($binary)
-            ->setArguments(array_merge([$inputFile], $parameters));
+            ->setArguments(array_merge($arguments, $parameters));
 
         $process = $processBuilder->getProcess();
         $process->run();
