@@ -27,7 +27,7 @@ class Tabula
     /**
      * Path to jar file
      */
-    private $jarArchive = __DIR__ . './../../../lib/tabula-extractor-0.7.4-SNAPSHOT-jar-with-dependencies.jar';
+    private $jarArchive = __DIR__ . '/../../../lib/tabula-extractor-0.7.4-SNAPSHOT-jar-with-dependencies.jar';
 
     /**
      * Converter constructor.
