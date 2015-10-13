@@ -1,5 +1,5 @@
 # Tabulapdf PHP Wrapper
-An OO PHP Wrapper for tabula-java - https://github.com/tabulapdf/tabula-extractor
+An OO PHP Wrapper for tabula-java - https://github.com/tabulapdf/tabula-java
 
 # Installation
 
