@@ -81,4 +81,20 @@ class ConverterTest extends PHPUnit_Framework_TestCase
     function shouldThrowExceptionWhenProcessFails() {
         $this->converter->parse(['--in', '--valid', '--arguments']);
     }
+
+    /**
+     * @test
+     */
+    function shouldUseExtraDirToLookForJavaExecutable() {
+
+        $tmpPath = getenv('PATH');
+        // Clear PATH environment variable and set bin dir explicitly
+        putenv('PATH=');
+        $this->converter->setBinDir(explode(';', $tmpPath));
+
+        $result = $this->converter->parse();
+        $lines = explode(PHP_EOL, $result);
+
+        $this->assertEquals('1,2', $lines[0]);
+    }
 }

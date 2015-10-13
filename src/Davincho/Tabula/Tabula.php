@@ -25,6 +25,12 @@ class Tabula
     private $file = null;
 
     /**
+     * Additional dir to check for java executable
+     * @var
+     */
+    private $binDir = [];
+
+    /**
      * Path to jar file
      */
     private $jarArchive = __DIR__ . './../../../lib/tabula-extractor-0.7.4-SNAPSHOT-jar-with-dependencies.jar';
@@ -32,10 +38,15 @@ class Tabula
     /**
      * Converter constructor.
      * @param null $file
+     * @param null $binDir
      */
-    public function __construct($file = null)
+    public function __construct($file = null, $binDir = null)
     {
         $this->file = $file;
+
+        if($binDir) {
+            $this->binDir = is_array($binDir) ? $binDir : [$binDir];
+        }
     }
 
     /**
@@ -54,18 +65,35 @@ class Tabula
         $this->file = $file;
     }
 
-    public function parse($parameters = [], $file = null) {
+    /**
+     * @return mixed
+     */
+    public function getBinDir()
+    {
+        return $this->binDir;
+    }
+
+    /**
+     * @param mixed $binDir
+     */
+    public function setBinDir($binDir)
+    {
+        $this->binDir = $binDir;
+    }
+
+    public function parse($parameters = [], $file = null)
+    {
         $inputFile = $file !== null ? $file : $this->file;
         $parameters = is_array($parameters) ? $parameters : [$parameters];
 
-        if($inputFile === null || !file_exists($inputFile) || !is_readable($inputFile)) {
+        if ($inputFile === null || !file_exists($inputFile) || !is_readable($inputFile)) {
             throw new InvalidArgumentException('File is null, not existent or not readable');
         }
 
         $finder = new ExecutableFinder();
-        $binary = $finder->find('java');
+        $binary = $finder->find('java', null, $this->binDir);
 
-        if($binary === null) {
+        if ($binary === null) {
             throw new RuntimeException('Could not find java on your system');
         }
 
@@ -79,7 +107,7 @@ class Tabula
         $process = $processBuilder->getProcess();
         $process->run();
 
-        if(!$process->isSuccessful()) {
+        if (!$process->isSuccessful()) {
             throw new RuntimeException($process->getErrorOutput());
         }
 
