@@ -31,6 +31,11 @@ class Tabula
     private $binDir = [];
 
     /**
+     * Locale variable for console command
+     */
+    private $locale = null;
+
+    /**
      * Path to jar file
      */
     private $jarArchive = __DIR__ . '/../../../lib/tabula-extractor-0.7.4-SNAPSHOT-jar-with-dependencies.jar';
@@ -40,13 +45,33 @@ class Tabula
      * @param null $file
      * @param null $binDir
      */
-    public function __construct($file = null, $binDir = null)
+    public function __construct($file = null, $binDir = null, $locale = null)
     {
         $this->file = $file;
 
         if($binDir) {
             $this->binDir = is_array($binDir) ? $binDir : [$binDir];
         }
+
+        if($locale) {
+            $this->locale = $locale;
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLocale()
+    {
+        return $this->locale;
+    }
+
+    /**
+     * @param mixed $locale
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
     }
 
     /**
@@ -101,6 +126,9 @@ class Tabula
         $arguments = ['-Xss2m', '-jar', $this->jarArchive, $inputFile];
 
         $processBuilder = new ProcessBuilder();
+        if($this->locale) {
+            $processBuilder->setEnv('LC_ALL', $this->locale);
+        }
         $processBuilder->setPrefix($binary)
             ->setArguments(array_merge($arguments, $parameters));
 
