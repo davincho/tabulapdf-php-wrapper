@@ -1,1 +1,6 @@
 language: php
+before_script:
+ - sudo apt-get update
+ - sudo apt-get install openjdk-7-jdk
+ - composer install
+script: vendor/bin/phpunit
