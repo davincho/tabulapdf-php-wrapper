@@ -91,6 +91,22 @@ class Tabula
     }
 
     /**
+     * @return string
+     */
+    public function getJarArchive()
+    {
+        return $this->jarArchive;
+    }
+
+    /**
+     * @param string $jarArchive
+     */
+    public function setJarArchive($jarArchive)
+    {
+        $this->jarArchive = $jarArchive;
+    }
+
+    /**
      * @return mixed
      */
     public function getBinDir()
@@ -123,7 +139,7 @@ class Tabula
         }
 
         // Jar binary, with additional java option (see https://github.com/tabulapdf/tabula-java/issues/26)
-        $arguments = ['-Xss2m', '-jar', $this->jarArchive, $inputFile];
+        $arguments = ['-Xss2m', '-jar', $this->getJarArchive(), $inputFile];
 
         $processBuilder = new ProcessBuilder();
         if($this->locale) {
