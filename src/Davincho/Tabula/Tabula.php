@@ -38,7 +38,7 @@ class Tabula
     /**
      * Path to jar file
      */
-    private $jarArchive = __DIR__ . '/../../../lib/tabula-extractor-0.7.4-SNAPSHOT-jar-with-dependencies.jar';
+    private $jarArchive = __DIR__ . '/../../../lib/tabula-1.0.1-jar-with-dependencies.jar';
 
     /**
      * Converter constructor.
@@ -122,7 +122,7 @@ class Tabula
         $this->binDir = $binDir;
     }
 
-    public function parse($parameters = [], $file = null)
+    public function parse($parameters = [], $file = null, $utf8Encode = true)
     {
         $inputFile = $file !== null ? $file : $this->file;
         $parameters = is_array($parameters) ? $parameters : [$parameters];
@@ -140,6 +140,10 @@ class Tabula
 
         // Jar binary, with additional java option (see https://github.com/tabulapdf/tabula-java/issues/26)
         $arguments = ['-Xss2m', '-jar', $this->getJarArchive(), $inputFile];
+
+        if($utf8Encode) {
+            array_splice( $arguments, 2, 0, '-Dfile.encoding=utf-8' );
+        }
 
         $processBuilder = new ProcessBuilder();
         if($this->locale) {
