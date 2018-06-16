@@ -14,7 +14,8 @@ namespace Davincho\Tabula;
 use Symfony\Component\Process\Exception\InvalidArgumentException;
 use Symfony\Component\Process\Exception\RuntimeException;
 use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Process\ProcessBuilder;
+use Symfony\Component\Process\Process;
+
 
 class Tabula
 {
@@ -145,14 +146,14 @@ class Tabula
             array_splice( $arguments, 2, 0, '-Dfile.encoding=utf-8' );
         }
 
-        $processBuilder = new ProcessBuilder();
-        if($this->locale) {
-            $processBuilder->setEnv('LC_ALL', $this->locale);
+        $envVars = [];
+        if ($this->locale) {
+            $envVars['LC_ALL'] = $this->locale;
         }
-        $processBuilder->setPrefix($binary)
-            ->setArguments(array_merge($arguments, $parameters));
+        $process = new Process(array_merge([$binary], $arguments, $parameters), null, [
+            $envVars
+        ]);
 
-        $process = $processBuilder->getProcess();
         $process->run();
 
         if (!$process->isSuccessful()) {
