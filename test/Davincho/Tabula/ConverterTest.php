@@ -1,5 +1,6 @@
 <?php
 
+namespace Davincho\Tabula;
 /*
  * This file is part of tabulapdf-php-wrapper
  *
@@ -9,7 +10,7 @@
  * file that was distributed with this source code.
  */
 
-class ConverterTest extends PHPUnit_Framework_TestCase
+class ConverterTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -40,8 +41,8 @@ class ConverterTest extends PHPUnit_Framework_TestCase
         $result = $this->converter->parse();
         $lines = explode(PHP_EOL, $result);
 
-        $this->assertEquals('1,2', $lines[0]);
-        $this->assertEquals('9,10', $lines[4]);
+        $this->assertEquals('1,2', trim($lines[0]));
+        $this->assertEquals('9,10', trim($lines[4]));
     }
 
     /** @test */
@@ -56,7 +57,7 @@ class ConverterTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('1,2', trim($fileContents[0]));
         $this->assertEquals('9,10', trim($fileContents[4]));
-        $this->assertNull($result);
+        $this->assertEmpty($result);
 
         unlink($output);
     }
@@ -70,8 +71,8 @@ class ConverterTest extends PHPUnit_Framework_TestCase
         $result = $this->converter->parse([], $tempFile);
         $lines = explode(PHP_EOL, $result);
 
-        $this->assertEquals('1,2', $lines[0]);
-        $this->assertEquals('9,10', $lines[4]);
+        $this->assertEquals('1,2', trim($lines[0]));
+        $this->assertEquals('9,10', trim($lines[4]));
     }
 
     /**
@@ -84,6 +85,7 @@ class ConverterTest extends PHPUnit_Framework_TestCase
 
     /**
      * @test
+     *
      */
     function shouldUseExtraDirToLookForJavaExecutable() {
 

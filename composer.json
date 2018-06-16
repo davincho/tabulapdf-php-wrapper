@@ -23,5 +23,11 @@
     "psr-0": {
       "Davincho": "src"
     }
+  },
+
+  "autoload-dev": {
+    "psr-0": {
+      "Davincho": "test"
+    }
   }
 }
